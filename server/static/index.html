@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>homelab-cable</title>
+        <link href="https://fonts.cdnfonts.com/css/digital-7-mono" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css"/>
+    </head>
+    <body>
+        <div class="rack">
+            <div class="appliance" id="networkPower">
+                <div class="hole hole-upper-left"></div>
+                <div class="hole hole-bottom-left"></div>
+                <div class="hole hole-upper-right"></div>
+                <div class="hole hole-bottom-right"></div>
+                <div class="logo">Homelab Cable<div class="logo-sub">CLABRETRO</div></div>
+
+                <label id="power-btn" class='checkboxControlV'>
+                    <input type='checkbox'/>
+                    <div></div>
+                    <span class='indicator'></span>
+                    <span class='label-text'>POWER</span>
+                </label>
+
+                <div id="status-holder">
+                    <div id="status-lcd" class="led led-off">88888888888888</div>
+                    <div class="label-text">STATUS</div>
+                </div>
+            </div>
+            <div class="appliance" id="channelInfo">
+                <div class="hole hole-upper-left"></div>
+                <div class="hole hole-bottom-left"></div>
+                <div class="hole hole-upper-right"></div>
+                <div class="hole hole-bottom-right"></div>
+                <div class="channels">
+                    <div class="button-holder">
+                        <button class="metal linear small disabled">1</button>
+                        <div class="button-indicator"></div>
+                    </div>
+                    <div class="button-holder">
+                        <button class="metal linear small disabled">2</button>
+                        <div class="button-indicator"></div>
+                    </div>
+                    <div class="button-holder">
+                        <button class="metal linear small disabled">3</button>
+                        <div class="button-indicator"></div>
+                    </div>
+                    <div class="button-holder">
+                        <button class="metal linear small disabled">4</button>
+                        <div class="button-indicator"></div>
+                    </div>
+                    <div id="chan-info">
+                        <span class="info-label">PLAYING</span><div id="chan-current" class="led led-off">88888888888888</div>
+                        <span class="info-label">NEXT</span><div id="chan-next" class="led led-off">88888888888888</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="hlc.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
