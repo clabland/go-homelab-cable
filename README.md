@@ -22,8 +22,11 @@ Navigate to http://localhost:3004/ in your browser.
 
 ### Interact with the Server via the HTTP API
 **Request**
+
 `curl http://localhost:3004/api/networks`
+
 **Response**
+
 ```
 [
     {
@@ -34,8 +37,11 @@ Navigate to http://localhost:3004/ in your browser.
 ```
 
 **Request**
+
 `curl http://localhost:3004/api/:call_sign/channels`
+
 **Response**
+```
 [
     {
         "id": "bd63bc6a-27cd-47fb-81d5-642a216f335e",
@@ -50,3 +56,4 @@ Navigate to http://localhost:3004/ in your browser.
         "live": false // if false, the channel is a 'virtual' channel. it is cycling through its media list in memory every 30 minutes to mimic a channel that isn't being watched.
     }
 ]
+```
