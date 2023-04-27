@@ -1,5 +1,7 @@
 # go-homelab-cable
 
+KHLC - Homelab Cable
+
 A Go application for playing media in your homelab the way a television station would. Set up multiple "channels" within your network, each of which continuously play through a list of local media files at random.
 
 ## Dependencies
