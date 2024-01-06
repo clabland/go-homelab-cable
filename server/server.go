@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"text/template"
 	"time"
 
 	"github.com/clabland/go-homelab-cable/network"
@@ -36,6 +37,11 @@ func (s *Server) Serve() {
 	}
 	e.Static("/", pwd+"/server/static/")
 
+	renderer := &TemplateRenderer{
+		templates: template.Must(template.ParseGlob(pwd + "/server/templates/*.html")),
+	}
+
+	e.Renderer = renderer
 	e.GET("/api/networks", s.getNetworks)
 
 	e.GET("/api/networks/:callsign/channels", s.getChannels)
@@ -43,6 +49,13 @@ func (s *Server) Serve() {
 	e.PUT("/api/networks/:callsign/channels/:channel_id/set_live", s.setChannelLive)
 	e.PUT("/api/networks/:callsign/channels/:channel_id/play_next", s.playNext)
 	e.GET("/api/networks/:callsign/live", s.liveChannel)
+
+	// Routes that always just act upon the current live channel
+	e.PUT("/api/networks/:callsign/live/next", s.playLiveNext)
+
+	e.GET("/htmx/meta", s.getHtmxMeta)
+	e.GET("/htmx/status", s.getHtmxStatus)
+	e.PUT("/htmx/live/next", s.htmxPlayLiveNext)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", s.port)))
 }

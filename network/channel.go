@@ -42,5 +42,6 @@ func (c *Channel) Current() string {
 }
 
 func (c *Channel) PlayNext() string {
-	return c.list.Advance()
+	_ = c.p.PlayNext()
+	return c.Current()
 }

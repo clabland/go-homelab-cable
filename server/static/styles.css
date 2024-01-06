@@ -61,12 +61,6 @@ body {
     right: 20px;
 }
 
-#power-btn {
-    position: relative;
-    left: 100px;
-    top: 50px;
-}
-
 .button-holder {
     display: flex;
     flex-direction: column;
@@ -105,64 +99,20 @@ body {
     -webkit-transition:0.1s; 
 }
 	
-/* Switch styles from https://codepen.io/pluton/pen/DWwBpr */
-.checkboxControlV{ 
-    border:2px solid #3b3b3b; border-radius:7px; display:inline-block; vertical-align:middle; font-weight:bold;
-    width:60px; height:100px; position:relative; margin:0 5px;
-    color:#282828; box-shadow:0 0 5px rgba(255,255,255,.4);
-    cursor: pointer;
-    text-align: center;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-.checkboxControlV > .label-text {
-    color: #fff;
-    display: block;
-    margin-top:8px;
-    font-size: 12px;
-}
-.checkboxControlV input{ position:absolute; visibility:hidden; }
-.checkboxControlV > div{ 
-    background:-webkit-linear-gradient(top, #292929 0%, #a8aeb0 11%, #a2a4a4 14%, #f4feff 58%, #dfe5e6 96%, #e6e6e6 100%); 
-    background:linear-gradient(to bottom, #292929 0%, #a8aeb0 11%, #a2a4a4 14%, #f4feff 58%, #dfe5e6 96%, #e6e6e6 100%); 
-    height:100%; border-radius:5px; line-height:50px;
-}
-.checkboxControlV > div:after{ 
-    content:'O'; display:block; height:50%; line-height:4;
-    transform-origin:0 0; -webkit-transform-origin:0 0;
-}
-.checkboxControlV > div:before{ 
-    content:'I'; display:block; height:50%; line-height:2.5;
-    border-radius:80%/5px;
-    box-shadow:0 8px 12px -13px #e8e8e8 inset, 0 -2px 2px -1px rgba(255,255,255,0.8);
-    transform-origin:0 100%; -webkit-transform-origin:0 100%; 
-    transform:scaleY(0.7); -webkit-transform:scaleY(0.7);
-}
-
-.checkboxControlV :checked ~ div{ 
-    background:-webkit-linear-gradient(bottom, #292929 0%, #a8aeb0 11%, #a2a4a4 14%, #f4feff 58%, #dfe5e6 96%, #e6e6e6 100%);
-    background:linear-gradient(to top, #292929 0%, #a8aeb0 11%, #a2a4a4 14%, #f4feff 58%, #dfe5e6 96%, #e6e6e6 100%);
-}
-.checkboxControlV :checked ~ div:before{ 
-    border-radius:0; box-shadow:none;
-    transform:none; -webkit-transform:none;
-}
-.checkboxControlV :checked ~ div:after{ 
-    border-radius:80%/5px;
-    box-shadow:0 -8px 12px -5px #ebebeb inset, 0 2px 2px 0 #aeaeae;
-    transform:scaleY(0.7); -webkit-transform:scaleY(0.7);
-}
-.indicator{ position:absolute; top:-20px; left:17px; width:25px; height:8px; box-shadow:0 0 8px #000 inset; border:1px solid rgba(255,255,255,0.1); border-radius:15px; transition:0.2s; -webkit-transition:0.2s; }
-.indicator:before{ content:''; display:block; margin:2px auto; width:8px; height:5px; border-radius:10px; transition:0.5s; -webkit-transition:0.5s; }
-.checkboxControlV :checked ~ .indicator:before{ box-shadow:0 0 2px 0px #F95757 inset, 0 0 12px 6px #F95757; background:#FFF; transition:0.1s; -webkit-transition:0.1s; }
-
-#status-holder {
-    position: relative;
-    left: 200px;
-    top: -18px;
+#play-next {
+    display: inline-block;
 }
 
 #status-lcd {
+    overflow: hidden;
+    white-space: nowrap;
     width: 500px;
+}
+
+#status-holder {
+    display: inline-block;
+    margin-left: 100px;
+    padding-top: 50px;
 }
 
 #status-holder > .label-text {
@@ -171,27 +121,6 @@ body {
     font-weight: bold;
     color: #fff;
     margin-left: 10px;
-}
-
-.channels {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    left: 100px;
-    top: 55px;
-}
-
-#chan-info {
-    display: inline-block;
-    margin-left: 20px;
-}
-
-.info-label {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    margin-left: 50px;
 }
 
 /* Button styles from https://codepen.io/simurai/pen/kvyEeg */
@@ -235,15 +164,6 @@ body {
   height: 60px;
   line-height: 50px !important;
   margin-left: 10px;
-}
-
-.metal.linear.disabled {
-    color: gray;
-}
-
-.metal:not(.disabled).active, .metal.linear.small.active {
-    color: #F95757;
-    text-shadow: hsla(0, 100%, 20%, 0.3) 0 -1px 0, hsl(0, 100%, 85%) 0 2px 1px, rgb(255, 153, 153) 0 0 5px, hsla(0, 100%, 50%, 0.6) 0 0 20px;
 }
 
 /* LED styles from https://codepen.io/andernunes/pen/VwBOvKN */

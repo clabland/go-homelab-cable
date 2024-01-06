@@ -10,17 +10,28 @@ Only tested on linux machines, requires VLC and LibVLC.
 sudo apt install vlc libvlc-dev
 ``` 
 
-## Jump Start
+## Quick Start
 ### Start the Server
 1. Sync this repo
-1. `go run cmds/cli/main server --path "./local/path/to/folder/of/videos"`
+1. `go run cmds/cli/main.go server --path "./local/path/to/folder/of/videos"`
+
+On Linux (I've tested on Ubuntu Raspberry Pi OS) you may need to prepend `DISPLAY=:0.0`, e.g. `go run cmds/cli/main.go server --path "./local/path/to/folder/of/videos"`
 
 ### Interact with the Server via the Client
 #### View what's currently playing
-`go run cmds/cli/main client`
+`go run cmds/cli/main.go client live`
+
+#### Play the next piece of media
+`go run cmds/cli/main.go client play_next`
+
+The CLI client assumes the server is running at localhost:3004. See `go run cmds/cli/main.go help` for more options.
 
 ### Interact with the Server via the web UI
 Navigate to http://localhost:3004/ in your browser.
+
+
+## Advanced
+There is a partially implemented notion of networks and multiple channels. These are exposed over a REST API, see server.go and api.go for more details.
 
 ### Interact with the Server via the HTTP API
 **Request**

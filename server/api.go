@@ -12,6 +12,7 @@ func (s *Server) getNetworks(e echo.Context) error {
 	return e.JSON(http.StatusOK, []domain.Network{
 		{
 			Name:     s.Network.Name,
+			Owner:    s.Network.Owner,
 			CallSign: "KHLC", // "KHomeLabCable"
 		},
 	})
@@ -47,6 +48,15 @@ func (s *Server) setChannelLive(e echo.Context) error {
 
 func (s *Server) playNext(e echo.Context) error {
 	c, err := s.Network.Channel(e.Param("channel_id"))
+	if err != nil {
+		return err
+	}
+	_ = c.PlayNext()
+	return e.JSON(http.StatusOK, domain.ToChannelModel(s.Network, c))
+}
+
+func (s *Server) playLiveNext(e echo.Context) error {
+	c, err := s.Network.CurrentChannel()
 	if err != nil {
 		return err
 	}

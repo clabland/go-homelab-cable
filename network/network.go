@@ -10,27 +10,37 @@ import (
 var ErrNetworkNoChannelPlaying = errors.New("network no channel playing")
 var ErrNetworkChannelNotFound = errors.New("network channel not found")
 
+var DefaultChannelName = "default"
+
 type Network struct {
-	Ctx  context.Context
-	Name string
+	Ctx   context.Context
+	Name  string
+	Owner string
 
 	channels     map[string]*Channel
 	tunedChannel string // The channel which is currently displaying video on the host
 }
 
-func NewNetwork(name string) *Network {
+func NewNetwork(name string, owner string) *Network {
 	if name == "" {
 		name = "Homelab Cable"
+	}
+	if owner == "" {
+		owner = "clabretro"
 	}
 
 	return &Network{
 		Name:     name,
+		Owner:    owner,
 		channels: make(map[string]*Channel, 0),
 	}
 }
 
 func (n *Network) AddChannel(list *player.MediaList) *Channel {
 	c := NewChannel(list)
+	if len(n.channels) == 0 {
+		c.ID = DefaultChannelName
+	}
 	n.channels[c.ID] = c
 	return c
 }
