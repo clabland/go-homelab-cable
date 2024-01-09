@@ -16,7 +16,7 @@
                 <div class="logo" hx-get="/htmx/meta" hx-swap="innerHTML" hx-trigger="load"></div>
                 <div id="status-holder">
                     <div class="label-text">PLAYING</div>
-                    <div id="status-lcd" class="led led-off" hx-get="/htmx/status" hx-trigger="load" hx-swap="outerHTML"><marquee behavior="alternate" scrollamount="3">88888888888888</marquee></div>
+                    <div id="status-lcd" class="led led-off" hx-get="/htmx/status" hx-trigger="load" hx-swap="outerHTML">88888888888888</div>
                     <div id="play-next">
                         <button hx-put="/htmx/live/next" hx-swap="none" class="metal linear small">></button>
                     </div>
