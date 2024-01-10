@@ -1,5 +1,6 @@
 body {
-    background-color: #282827;
+    --primary-background-color: #282827; /* use color from body */
+    background-color: var(--primary-background-color);
 }
 
 .appliance {
@@ -15,11 +16,12 @@ body {
 }
 .appliance::before {
     /* Move metal appliance texture to pseudo element so that is doesn't squish the texture at small resolutions */
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    min-width: 1200px;
+    content: '';                /* pseudo elements will not show up without this property, set just set it to empty string */
+    pointer-events: none;       /* make sure that the layer the background texture is on will not interact with UI clicks */
+    position: absolute;         /* allows for the inset property to work */
+    inset: 0;                   /* 0 mean no inset so the pseudo div will take up all the space of the parent */
+    min-width: 1200px;          /* the texture will never shrink below 1200px but since the parent overflow is hidden it will not be seen */
+                                /* metal appliance texture gradient */
     background-image: 	-webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,20%, .1) 7.5%, hsla(0,0%, 20%,0) 9%),					
     -webkit-repeating-linear-gradient(left, hsla(-1,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%, hsla(0,0%,  0%,0) 6%),					
     -webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,20%,0) 1.2%, hsla(0,0%,20%,.15) 2.2%, hsla(0,0%,20%,0) 4%),
@@ -27,48 +29,56 @@ body {
 }
 .appliance::after{
     /* Add Rack holes with pseduo element instead of real elements for easier cloning */
-    content: ''; /* pseudo elements will not show up without this property, set just set it to empty string */
-    pointer-events: none;
-    position: absolute;
-    inset: 20px; /* spacing from edge */
+    content: '';                /* pseudo elements will not show up without this property, set just set it to empty string */
+    pointer-events: none;       /* make sure that the layer the holes are on will not interact with UI clicks */
+    position: absolute;         /* allows for the inset property to work */
+    
+    /* change variables below to change shape of holes and shadows */
+    inset: 20px;                /* spacing from edge, top, left, bottom, and right */
+    --hole-width: 12px;         /* width of conic gradient */
+    --hole-height: 10px;        /* size of circle and height of conic gradient */
+    --shadow-color: #000000;  /* color for the shadow */ 
+    --shadow-x: 2px;            /* offset in the x direction for the shadow */
+    --shadow-y: 2px;            /* offset in the y direction for the shadow */
 
-    --hole-size: 10px;   /* height of rack hole */
-    --c: #282827; /* use white to lighten hole, use black to darken holes */
-    --shadow-color: #000000;
+    /* draw 2 circles and join with conic gradient to get pill shape for holes and dropshadows */
+    background:
+        /* top-left hole */ 
+        radial-gradient(circle at calc(var(--hole-height) + var(--shadow-x)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width) + var(--shadow-x)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height) + var(--shadow-x)) var(--shadow-y) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* top-right hole */
+        radial-gradient(circle at calc(100% - var(--hole-height)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) var(--shadow-y) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-right hole */
+        radial-gradient(circle at calc(100% - var(--hole-height)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) 100% / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-left hole */
+        radial-gradient(circle at calc(var(--hole-height) + var(--shadow-x)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width) + var(--shadow-x)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height)) 100% / var(--hole-width) calc(var(--hole-height) * 2),
+        
+        /* top-left shadown */ 
+        radial-gradient(circle at var(--hole-height) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height)) 0px / var(--hole-width) calc(var(--hole-height) * 2),
+        /* top-right shadow */
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--shadow-x)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width) - var(--shadow-x)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height) - var(--shadow-x)) 0px / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-right shadow */
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--shadow-x)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width) - var(--shadow-x)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) calc(100% - var(--shadow-y)) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-left shadow */
+        radial-gradient(circle at var(--hole-height) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height) - var(--shadow-x)) calc(100% - var(--shadow-y)) / var(--hole-width) calc(var(--hole-height) * 2);
 
-    opacity: .9;
-
-    /* draw 3 overlapping circles to get pill shape for both hole and dropshadow */
-    /* do this 4 times, one for each corner, for each hole */
-    /* do this 4 times, one for each corner, for each dropshadow */
-    /* for a total of 24 gradients */
-    background: 
-        radial-gradient(circle at calc(var(--hole-size) + 2px) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + 2px + var(--hole-size) / 2) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + 2px + var(--hole-size)) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + 2px) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + 2px + var(--hole-size) / 2) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + 2px + var(--hole-size)) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size)) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size) - var(--hole-size) / 2) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size) - var(--hole-size)) calc(var(--hole-size) + 2px), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size)) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size) - var(--hole-size) / 2) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - var(--hole-size) - var(--hole-size)) calc(100% - var(--hole-size)), var(--c) var(--hole-size), transparent var(--hole-size)),
-
-        radial-gradient(circle at calc(var(--hole-size)) calc(var(--hole-size)), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + var(--hole-size) / 2) calc(var(--hole-size)), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + var(--hole-size)) calc(var(--hole-size)), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size)) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + var(--hole-size) / 2) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(var(--hole-size) + var(--hole-size)) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size)) var(--hole-size), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size) - var(--hole-size) / 2) var(--hole-size), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size) - var(--hole-size)) var(--hole-size), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size)) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size) - var(--hole-size) / 2) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size)),
-        radial-gradient(circle at calc(100% - 2px - var(--hole-size) - var(--hole-size)) calc(100% - var(--hole-size) - 2px), var(--shadow-color) var(--hole-size), transparent var(--hole-size));
-
+    /* prevents the conic gradients from repeating */
+    background-repeat: no-repeat;
 
 }
 .logo {
@@ -231,9 +241,12 @@ div#status-lcd > span {
   }
 
 .metal * {
+    /* makes it so that the '>' character is not selectable */
     user-select: none;
     -webkit-user-select: none;
 }
+
+
 /* LED styles from https://codepen.io/andernunes/pen/VwBOvKN */
 .led {
   display: inline-block;
@@ -285,24 +298,30 @@ div#status-lcd > span {
 
 @keyframes move-words {
     0% {
+        /* text starting position */
         left: 0%;
     }
     50% {
+        /* move text off screen to the left */
         left: -106%;
         bottom:unset;
     }
     51% {
+        /* move text down off display so we can reset without seeing it */
         bottom: -100%;
         left: -106%;
     }
     52% {
+        /* reset the text to the right edge */
         bottom: -100%;
         left: 106%;
     }
     53% {
+        /* bring text back up inline with display */
         bottom: unset;
     }
     100% {
+        /* move back to starting position, to prepare for the looping */
         left: 1%;
     }
   }
