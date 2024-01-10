@@ -16,6 +16,7 @@ body {
 .appliance::before {
     /* Move metal appliance texture to pseudo element so that is doesn't squish the texture at small resolutions */
     content: '';
+    pointer-events: none;
     position: absolute;
     inset: 0;
     min-width: 1200px;
@@ -24,9 +25,10 @@ body {
     -webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,20%,0) 1.2%, hsla(0,0%,20%,.15) 2.2%, hsla(0,0%,20%,0) 4%),
     -webkit-linear-gradient(-90deg, hsl(0,0%,10%)  0%, hsl(0,0%,10%) 47%, hsl(0,0%,10%) 53%, hsl(0,0%,10%)100%);
 }
-.appliance:after{
+.appliance::after{
     /* Add Rack holes with pseduo element instead of real elements for easier cloning */
     content: ''; /* pseudo elements will not show up without this property, set just set it to empty string */
+    pointer-events: none;
     position: absolute;
     inset: 20px; /* spacing from edge */
 
@@ -122,7 +124,7 @@ body {
 }
 
 #play-next {
-    z-index: 1;
+    position: relative;
 }
 	
 #status-lcd {
@@ -212,6 +214,26 @@ div#status-lcd > span {
     justify-content: center;
 }
 
+/* active ------------------------- */
+
+.metal:active {
+    color: hsl(210, 100%, 40%);
+    text-shadow: hsla(210,100%,20%,.3) 0 -1px 0, hsl(210,100%,85%) 0 2px 1px, hsla(200,100%,80%,1) 0 0 5px, hsla(210,100%,50%,.6) 0 0 20px;
+    box-shadow: 
+      inset hsla(210,100%,30%,  1) 0  0px 0px 4px, /* border */
+      inset hsla(210,100%,15%, .4) 0 -1px 5px 4px, /* soft SD */
+      inset hsla(210,100%,20%,.25) 0 -1px 0px 7px, /* bottom SD */
+      inset hsla(210,100%,100%,.7) 0  2px 1px 7px, /* top HL */
+      
+      hsla(210,100%,75%, .8) 0  0px 3px 2px, /* outer SD */
+      hsla(210,50%,40%, .25) 0 -5px 6px 4px, /* outer SD */
+      hsla(210,80%,95%,   1) 0  5px 6px 4px; /* outer HL */
+  }
+
+.metal * {
+    user-select: none;
+    -webkit-user-select: none;
+}
 /* LED styles from https://codepen.io/andernunes/pen/VwBOvKN */
 .led {
   display: inline-block;
