@@ -1,15 +1,23 @@
 package server
 
 import (
+	"embed"
 	"fmt"
 	"math/rand"
-	"os"
 	"text/template"
 	"time"
 
 	"github.com/clabland/go-homelab-cable/network"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+)
+
+// embedded files
+var (
+	//go:embed static/*
+	staticFS embed.FS
+	//go:embed templates/*.html
+	templatesFS embed.FS
 )
 
 type Server struct {
@@ -30,15 +38,14 @@ func (s *Server) Serve() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-
-	pwd, err := os.Getwd()
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
-	e.Static("/", pwd+"/server/static/")
+	// need to use MustSubFS since the embedded fs by default includes the
+	// subfolder name (in this case "static")
+	// if the subfolder name changes, both the //go:embed directive
+	// and this will need to be updated
+	e.StaticFS("/", echo.MustSubFS(staticFS, "static"))
 
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob(pwd + "/server/templates/*.html")),
+		templates: template.Must(template.ParseFS(templatesFS, "templates/*.html")),
 	}
 
 	e.Renderer = renderer
