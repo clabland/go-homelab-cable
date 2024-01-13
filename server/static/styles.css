@@ -1,23 +1,85 @@
 body {
-    background-color: #282827;
+    --primary-background-color: #282827; /* use color from body */
+    background-color: var(--primary-background-color);
 }
-.appliance:before{
-    background-image: linear-gradient(#fff, #fff);
-    background-size: 1px 100%;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
+
 .appliance {
-    background-image: 	-webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,20%, .1) 7.5%, hsla(0,0%, 20%,0) 9%),					
-            -webkit-repeating-linear-gradient(left, hsla(-1,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%, hsla(0,0%,  0%,0) 6%),					
-            -webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,20%,0) 1.2%, hsla(0,0%,20%,.15) 2.2%, hsla(0,0%,20%,0) 4%),
-            -webkit-linear-gradient(-90deg, hsl(0,0%,10%)  0%, hsl(0,0%,10%) 47%, hsl(0,0%,10%) 53%, hsl(0,0%,10%)100%);
-    height: max-content;
+    height: 200px;
+    width: 100%;
     position: relative;
     border-radius: 5px;
-    margin: 3px 3% 3% 3%;
-    padding: 3%;
     box-shadow: 2px 1px 1px rgba(0, 0, 0);
+    display: flex;
+    align-items: center;
+    gap: 1em;    
+    overflow: hidden;
+}
+.appliance::before {
+    /* Move metal appliance texture to pseudo element so that is doesn't squish the texture at small resolutions */
+    content: '';                /* pseudo elements will not show up without this property, set just set it to empty string */
+    pointer-events: none;       /* make sure that the layer the background texture is on will not interact with UI clicks */
+    position: absolute;         /* allows for the inset property to work */
+    inset: 0;                   /* 0 mean no inset so the pseudo div will take up all the space of the parent */
+    min-width: 1200px;          /* the texture will never shrink below 1200px but since the parent overflow is hidden it will not be seen */
+                                /* metal appliance texture gradient */
+    background-image: 	-webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,20%, .1) 7.5%, hsla(0,0%, 20%,0) 9%),					
+    -webkit-repeating-linear-gradient(left, hsla(-1,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%, hsla(0,0%,  0%,0) 6%),					
+    -webkit-repeating-linear-gradient(left, hsla(-1,0%,20%,0) 0%, hsla(0,0%,20%,0) 1.2%, hsla(0,0%,20%,.15) 2.2%, hsla(0,0%,20%,0) 4%),
+    -webkit-linear-gradient(-90deg, hsl(0,0%,10%)  0%, hsl(0,0%,10%) 47%, hsl(0,0%,10%) 53%, hsl(0,0%,10%)100%);
+}
+.appliance::after{
+    /* Add Rack holes with pseduo element instead of real elements for easier cloning */
+    content: '';                /* pseudo elements will not show up without this property, set just set it to empty string */
+    pointer-events: none;       /* make sure that the layer the holes are on will not interact with UI clicks */
+    position: absolute;         /* allows for the inset property to work */
+    
+    /* change variables below to change shape of holes and shadows */
+    inset: 20px;                /* spacing from edge, top, left, bottom, and right */
+    --hole-width: 12px;         /* width of conic gradient */
+    --hole-height: 10px;        /* size of circle and height of conic gradient */
+    --shadow-color: #000000;  /* color for the shadow */ 
+    --shadow-x: 2px;            /* offset in the x direction for the shadow */
+    --shadow-y: 2px;            /* offset in the y direction for the shadow */
+
+    /* draw 2 circles and join with conic gradient to get pill shape for holes and dropshadows */
+    background:
+        /* top-left hole */ 
+        radial-gradient(circle at calc(var(--hole-height) + var(--shadow-x)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width) + var(--shadow-x)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height) + var(--shadow-x)) var(--shadow-y) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* top-right hole */
+        radial-gradient(circle at calc(100% - var(--hole-height)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width)) calc(var(--hole-height) + var(--shadow-y)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) var(--shadow-y) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-right hole */
+        radial-gradient(circle at calc(100% - var(--hole-height)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) 100% / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-left hole */
+        radial-gradient(circle at calc(var(--hole-height) + var(--shadow-x)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width) + var(--shadow-x)) calc(100% - var(--hole-height)), var(--primary-background-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--primary-background-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height)) 100% / var(--hole-width) calc(var(--hole-height) * 2),
+        
+        /* top-left shadown */ 
+        radial-gradient(circle at var(--hole-height) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height)) 0px / var(--hole-width) calc(var(--hole-height) * 2),
+        /* top-right shadow */
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--shadow-x)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width) - var(--shadow-x)) var(--hole-height), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height) - var(--shadow-x)) 0px / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-right shadow */
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--shadow-x)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(100% - var(--hole-height) - var(--hole-width) - var(--shadow-x)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(100% - var(--hole-height)) calc(100% - var(--shadow-y)) / var(--hole-width) calc(var(--hole-height) * 2),
+        /* bottom-left shadow */
+        radial-gradient(circle at var(--hole-height) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        radial-gradient(circle at calc(var(--hole-height) + var(--hole-width)) calc(100% - var(--hole-height) - var(--shadow-y)), var(--shadow-color) var(--hole-height), transparent var(--hole-height)),
+        conic-gradient(var(--shadow-color) 0% 100%, transparent 0% 100%) calc(0% + var(--hole-height) - var(--shadow-x)) calc(100% - var(--shadow-y)) / var(--hole-width) calc(var(--hole-height) * 2);
+
+    /* prevents the conic gradients from repeating */
+    background-repeat: no-repeat;
+
 }
 .logo {
     position: absolute;
@@ -31,34 +93,6 @@ body {
 .logo-sub {
     font-size:1rem;
     text-align: right;
-}
-
-.hole {
-    position: absolute;
-    width: 30px;
-    height: 20px;
-    border-radius: 50px;
-    background: #dcdcdc;
-    -moz-box-shadow: -1px 2px 4px #000;
-    -webkit-box-shadow: -1px 2px 4px #000;
-    box-shadow: -1px 2px 4px #000, -1px -1px 5px rgba(0,0,0,0.2);
-    border: 0px solid rgba(255,255,255,0.1);
-}
-.hole-upper-left {
-    top: 20px;
-    left: 20px;
-}
-.hole-bottom-left {
-    bottom: 20px;
-    left: 20px;
-}
-.hole-upper-right {
-    top: 20px;
-    right: 20px;
-}
-.hole-bottom-right {
-    bottom: 20px;
-    right: 20px;
 }
 
 .button-holder {
@@ -98,24 +132,44 @@ body {
     transition:0.1s; 
     -webkit-transition:0.1s; 
 }
-	
-#play-next {
-    display: inline-block;
-}
 
+#play-next {
+    position: relative;
+}
+	
 #status-lcd {
     overflow: hidden;
     white-space: nowrap;
-    width: 500px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.4em;
+}
+
+div#status-lcd > span {
+    animation: move-words 40s steps(80, end) infinite;
+    position: relative;
 }
 
 #status-holder {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    padding-top: 50px;
+    position: relative;
+    display: inline-block;
+    padding-left: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 720px;
+}
+
+#status-holder::after {
+    content: 'Playing';
+    display: block;
+    position: absolute;
+    text-transform: uppercase;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    bottom: -16px;
+    padding-inline: 6px;
 }
 
 #status-holder > .label-text {
@@ -163,21 +217,43 @@ body {
     hsl(0,0%,70%)100%);
 }
 .metal.linear.small {
-  width: 70px;
-  height: 60px;
-  line-height: 50px !important;
-  margin-left: 10px;
+    width: 70px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* active ------------------------- */
+
+.metal:active {
+    color: hsl(210, 100%, 40%);
+    text-shadow: hsla(210,100%,20%,.3) 0 -1px 0, hsl(210,100%,85%) 0 2px 1px, hsla(200,100%,80%,1) 0 0 5px, hsla(210,100%,50%,.6) 0 0 20px;
+    box-shadow: 
+      inset hsla(210,100%,30%,  1) 0  0px 0px 4px, /* border */
+      inset hsla(210,100%,15%, .4) 0 -1px 5px 4px, /* soft SD */
+      inset hsla(210,100%,20%,.25) 0 -1px 0px 7px, /* bottom SD */
+      inset hsla(210,100%,100%,.7) 0  2px 1px 7px, /* top HL */
+      
+      hsla(210,100%,75%, .8) 0  0px 3px 2px, /* outer SD */
+      hsla(210,50%,40%, .25) 0 -5px 6px 4px, /* outer SD */
+      hsla(210,80%,95%,   1) 0  5px 6px 4px; /* outer HL */
+  }
+
+.metal * {
+    /* makes it so that the '>' character is not selectable */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 
 /* LED styles from https://codepen.io/andernunes/pen/VwBOvKN */
 .led {
   display: inline-block;
   font-weight: 700;
   font-family: 'Digital-7 Mono', sans-serif;
-  width: 300px;
+  width: 100%;
   height: 50px;
-  margin: 10px 10px 10px 10px;
-  text-align:center;
   line-height: 50px;
   font-size: 40px;
   color: #000000aa;
@@ -192,6 +268,8 @@ body {
   border-radius: 10px;
   box-shadow: 0px 0px 50px #000000ee inset;
   text-shadow: 0px 0px 20px #ffff0022;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .led-off {
@@ -216,4 +294,49 @@ body {
   box-shadow: 0px 0px 50px #000000ee inset;
   text-shadow: 0px 0px 20px #ffff00cc;
   color: #ff9999cc;
+}
+
+@keyframes move-words {
+    0% {
+        /* text starting position */
+        left: 0%;
+    }
+    50% {
+        /* move text off screen to the left */
+        left: -106%;
+        bottom:unset;
+    }
+    51% {
+        /* move text down off display so we can reset without seeing it */
+        bottom: -100%;
+        left: -106%;
+    }
+    52% {
+        /* reset the text to the right edge */
+        bottom: -100%;
+        left: 106%;
+    }
+    53% {
+        /* bring text back up inline with display */
+        bottom: unset;
+    }
+    100% {
+        /* move back to starting position, to prepare for the looping */
+        left: 1%;
+    }
+  }
+
+@media screen and (max-width: 886px) {
+    .appliance {
+        justify-content: center;
+        align-items: flex-end;
+        flex-direction: column;
+    }
+    #status-holder {
+        padding-inline: 100px;
+        max-width: unset;
+    }    
+    #play-next {
+        padding-right: 100px;
+    }
 }

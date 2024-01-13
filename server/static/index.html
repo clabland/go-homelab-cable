@@ -7,21 +7,19 @@
         <script src="https://unpkg.com/htmx.org@1.9.7"></script>
     </head>
     <body>
-        <div class="rack">
-            <div class="appliance">
-                <div class="hole hole-upper-left"></div>
-                <div class="hole hole-bottom-left"></div>
-                <div class="hole hole-upper-right"></div>
-                <div class="hole hole-bottom-right"></div>
-                <div class="logo" hx-get="/htmx/meta" hx-swap="innerHTML" hx-trigger="load"></div>
+        <section class="rack">
+            <article class="appliance">
+                <div class="logo" hx-get="/htmx/meta" hx-swap="innerHTML" hx-trigger="load">
+                </div>
                 <div id="status-holder">
-                    <div class="label-text">PLAYING</div>
-                    <div id="status-lcd" class="led led-off" hx-get="/htmx/status" hx-trigger="load" hx-swap="outerHTML">88888888888888</div>
-                    <div id="play-next">
-                        <button hx-put="/htmx/live/next" hx-swap="none" class="metal linear small">></button>
+                    <div id="status-lcd" class="led led-off" hx-get="/htmx/status" hx-trigger="load" hx-swap="outerHTML">
+                        88888888888888
                     </div>
                 </div>
-            </div>
-        </div>
+                <div id="play-next">
+                    <button hx-put="/htmx/live/next" hx-swap="none" class="metal linear small">></button>
+                </div>
+            </article>
+        </section>
     </body>
 </html>
